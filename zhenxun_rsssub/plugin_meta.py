@@ -36,6 +36,7 @@ USAGE = """
 示例：
     订阅姬 添加 真寻更新 https://example.com/feed.xml
     订阅姬 添加 RSSHub路由 /bilibili/user/video/123456
+    订阅姬 添加 TG频道 /telegram/channel/botnews
     订阅姬 拉取 真寻更新
     订阅姬 状态 真寻更新
     订阅姬 设置 真寻更新 频率=30 图片=5
@@ -56,6 +57,10 @@ COMMANDS = [
             Example(
                 exec="订阅姬 添加 RSSHub路由 /bilibili/user/video/123456",
                 description="通过 RSSHub 路由添加订阅",
+            ),
+            Example(
+                exec="订阅姬 添加 TG频道 /telegram/channel/botnews",
+                description="订阅 Telegram 频道",
             ),
         ],
     ),

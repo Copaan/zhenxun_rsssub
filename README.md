@@ -146,6 +146,7 @@ BAIDU_TRANSLATE_KEY="your_baidu_key"
 ```text
 订阅姬 添加 真寻更新 https://example.com/feed.xml
 订阅姬 添加 B站动态 /bilibili/user/video/123456
+订阅姬 添加 TG频道 /telegram/channel/botnews
 ```
 
 **说明：**
@@ -339,6 +340,8 @@ BAIDU_TRANSLATE_KEY="your_baidu_key"
 ```text
 订阅姬 添加 B站用户视频 /bilibili/user/video/123456
 订阅姬 添加 GitHub趋势 /github/trending/daily
+订阅姬 添加 TG频道 /telegram/channel/botnews
+订阅姬 添加 Twitter用户 /twitter/user/username
 ```
 
 #### 批量设置属性
