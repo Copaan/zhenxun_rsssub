@@ -26,6 +26,8 @@
 
 ### 安装步骤
 
+#### 方法一：手动安装（推荐）
+
 1. **克隆插件仓库**
 
    ```bash
@@ -37,26 +39,40 @@
    将 `zhenxun_rsssub` 文件夹复制到真寻机器人的 `plugins` 目录下：
 
    ```bash
+   # Linux/macOS
    cp -r zhenxun_rsssub /path/to/zhenxun_bot/plugins/
+   
+   # Windows (PowerShell)
+   Copy-Item -Recurse zhenxun_rsssub C:\path\to\zhenxun_bot\plugins\
    ```
 
 3. **安装依赖**
+
+   **使用 uv（推荐）：**
 
    在真寻机器人项目根目录下执行：
 
    ```bash
    cd /path/to/zhenxun_bot
-   pip install -r requirements.txt
-   # 或使用 uv
-   uv sync
+   # 从插件的 requirements.txt 安装依赖
+   uv pip install -r plugins/zhenxun_rsssub/requirements.txt
+   ```
+
+   **或使用 pip：**
+
+   ```bash
+   cd /path/to/zhenxun_bot
+   pip install -r plugins/zhenxun_rsssub/requirements.txt
    ```
 
 4. **重启真寻机器人**
 
    ```bash
-   python bot.py
-   # 或使用 uv
+   # 使用 uv
    uv run zx
+   
+   # 或使用 Python
+   python bot.py
    ```
 
 5. **配置插件**
@@ -65,6 +81,19 @@
 
    - **WebUI 配置**：访问真寻机器人的 WebUI，在插件管理中找到"订阅姬"进行配置
    - **配置文件**：编辑 `data/config.yaml` 文件中的 `dingyueji` 模块配置
+
+---
+
+#### 方法二：使用 nb-cli 安装（如果支持）
+
+如果你的真寻机器人版本支持 nb-cli 插件安装：
+
+```bash
+cd /path/to/zhenxun_bot
+nb plugin install zhenxun_rsssub
+```
+
+然后按照上述步骤 3-5 完成依赖安装和配置。
 
 ## ⚙️ 配置说明
 

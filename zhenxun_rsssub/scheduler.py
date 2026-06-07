@@ -185,15 +185,12 @@ async def check_registered_feeds() -> None:
 
 def ensure_batch_job() -> None:
     """确保 batch worker 任务已注册到真寻调度器。"""
-    # 检查任务是否已存在
-    job_id = BATCH_JOB_ID
     
     async def _register_job():
         await scheduler_manager.add_interval_task(
             plugin_name="dingyueji",
             group_id=None,
             seconds=_configured_batch_interval_seconds(),
-            task_id=job_id,
             func=check_registered_feeds,
         )
         logger.success("RSS batch worker created")
