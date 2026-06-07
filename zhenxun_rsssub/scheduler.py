@@ -6,11 +6,10 @@ import hashlib
 import re
 from urllib.parse import urlparse
 
-from nonebot import logger, require
+from nonebot import logger
 from yarl import URL
 
-require("nonebot_plugin_apscheduler")
-from nonebot_plugin_apscheduler import scheduler
+from zhenxun.services.scheduler import scheduler_manager
 
 from . import feed_state
 from .globals import plugin_config
@@ -185,26 +184,35 @@ async def check_registered_feeds() -> None:
 
 
 def ensure_batch_job() -> None:
-    if scheduler.get_job(BATCH_JOB_ID):
-        return
-    scheduler.add_job(
-        func=check_registered_feeds,
-        trigger="interval",
-        seconds=_configured_batch_interval_seconds(),
-        id=BATCH_JOB_ID,
-        misfire_grace_time=30,
-        max_instances=1,
-        coalesce=True,
-    )
-    logger.success("RSS batch worker created")
+    """确保 batch worker 任务已注册到真寻调度器。"""
+    # 检查任务是否已存在
+    job_id = BATCH_JOB_ID
+    
+    async def _register_job():
+        await scheduler_manager.add_interval_task(
+            plugin_name="dingyueji",
+            group_id=None,
+            seconds=_configured_batch_interval_seconds(),
+            task_id=job_id,
+            func=check_registered_feeds,
+        )
+        logger.success("RSS batch worker created")
+    
+    # 由于 add_interval_task 是异步的，我们需要在事件循环中执行
+    try:
+        loop = asyncio.get_event_loop()
+        if loop.is_running():
+            asyncio.ensure_future(_register_job())
+        else:
+            loop.run_until_complete(_register_job())
+    except Exception as e:
+        logger.error(f"Failed to register batch job: {e}")
 
 
 def remove_rss_update_job(rss: RSS):
     """取消订阅的调度注册。"""
     _registered_feeds.pop(rss.name, None)
     _feed_next_due_at.pop(rss.name, None)
-    if scheduler.get_job(rss.name):
-        scheduler.remove_job(rss.name)
 
 
 async def create_rss_update_job(rss: RSS, *, run_immediately: bool = True):
